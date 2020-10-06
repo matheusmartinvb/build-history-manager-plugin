@@ -115,7 +115,7 @@ pipeline {
 			steps {
 				withMaven(maven: "Maven 3", options: [artifactsPublisher(disabled: true)]) {
 // 					sh "mvn clean deploy jib:build"
-					sh "mvn clean deploy"
+					sh "mvn clean deploy -DskipTests"
 				}
 			}
 		}
