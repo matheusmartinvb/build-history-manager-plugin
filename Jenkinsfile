@@ -22,7 +22,7 @@ pipeline {
 			],
 			[
 				// Keep last 30 builds (regardless of status)
-				matchAtMost: 30,
+				matchAtMost: 5,
 				continueAfterMatch: false
 			],
 			[
@@ -30,7 +30,7 @@ pipeline {
 				conditions: [
 					BuildResult(matchSuccess: true)
 				],
-				matchAtMost: 30,
+				matchAtMost: 5,
 				continueAfterMatch: false
 			],
 			[
@@ -48,10 +48,11 @@ pipeline {
 		             description: 'Run the build only if there have been SCM or dependency changes', defaultValue: true)
 	}
 
-// 	triggers {
+	triggers {
 // 		pollSCM 'H/15 * * * *'
 // 		cron('H/30 * * * *')
-// 	}
+// 		cron('H/5 * * * *')
+	}
 
 	stages {
 		stage('Checkout') {
