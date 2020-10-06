@@ -91,26 +91,26 @@ pipeline {
 				}
 			}
 		}
-		stage('Set build number') {
-			steps {
-				script {
-					def buildNumber;
-					lock ('tagging-betwave-server') {
-						buildNumber = tagBuildNumber scm
-					}
-
-					withMaven(maven: "Maven 3") {
-						sh "mvn tagging:build-number -DbuildNumber=${buildNumber}"
-					}
-
-					def pom = readMavenPom file: "betwave/betwave-root/pom.xml"
-					buildName pom.version
-
-					writeFile file: 'version.properties', text: "version=${pom.version}"
-					archiveArtifacts artifacts: 'version.properties'
-				}
-			}
-		}
+// 		stage('Set build number') {
+// 			steps {
+// 				script {
+// 					def buildNumber;
+// 					lock ('tagging-betwave-server') {
+// 						buildNumber = tagBuildNumber scm
+// 					}
+//
+// 					withMaven(maven: "Maven 3") {
+// 						sh "mvn tagging:build-number -DbuildNumber=${buildNumber}"
+// 					}
+//
+// 					def pom = readMavenPom file: "betwave/betwave-root/pom.xml"
+// 					buildName pom.version
+//
+// 					writeFile file: 'version.properties', text: "version=${pom.version}"
+// 					archiveArtifacts artifacts: 'version.properties'
+// 				}
+// 			}
+// 		}
 		stage('Build & Deploy') {
 			steps {
 				withMaven(maven: "Maven 3", options: [artifactsPublisher(disabled: true)]) {
