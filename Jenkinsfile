@@ -71,47 +71,46 @@ pipeline {
 // 				}
 // 			}
 // 		}
-// 		stage('Check for changes') {
-// 			steps {
-// 				echo "Previous commit: ${env.GIT_PREVIOUS_COMMIT}"
-// 				echo "Current commit: ${gitCommit}"
-// 				script {
-// 					if (params.onlyIfChanges && gitCommit == env.GIT_PREVIOUS_COMMIT) {
-// 						copyArtifacts filter: 'dependencies.txt', fingerprintArtifacts: false, projectName: env.JOB_NAME,
-// 						              selector: lastWithArtifacts(), target: 'upstream', optional: true
-// 						def oldDependencies =
-// 							(fileExists('upstream/dependencies.txt') ? readFile('upstream/dependencies.txt') : '')
-// 						def newDependencies = readFile 'dependencies.txt'
-// 						if (oldDependencies == newDependencies) {
-// 							buildName 'Empty'
-// 							currentBuild.result = 'ABORTED'
-//                      error('There have been no changes since the last build')
-// 						}
-// 					}
-// 				}
-// 			}
-// 		}
-		stage('Set build number') {
+		stage('Check for changes') {
 			steps {
+				echo "Previous commit: ${env.GIT_PREVIOUS_COMMIT}"
+				echo "Current commit: ${gitCommit}"
 				script {
-					def buildNumber;
-					lock ('tagging-betwave-server') {
-						buildNumber = tagBuildNumber scm
+					if (params.onlyIfChanges && gitCommit == env.GIT_PREVIOUS_COMMIT) {
+						copyArtifacts filter: 'dependencies.txt', fingerprintArtifacts: false, projectName: env.JOB_NAME,
+						              selector: lastWithArtifacts(), target: 'upstream', optional: true
+						def oldDependencies =
+							(fileExists('upstream/dependencies.txt') ? readFile('upstream/dependencies.txt') : '')
+						def newDependencies = readFile 'dependencies.txt'
+						if (oldDependencies == newDependencies) {
+							buildName 'Empty'
+							currentBuild.result = 'ABORTED'
+                     error('There have been no changes since the last build')
+						}
 					}
-
-					withMaven(maven: "Maven 3") {
-						sh "mvn tagging:build-number -DbuildNumber=${buildNumber}"
-					}
-
-// 					def pom = readMavenPom file: "betwave/betwave-root/pom.xml"
-					def pom = readMavenPom file: "pom.xml"
-					buildName pom.version
-
-					writeFile file: 'version.properties', text: "version=${pom.version}"
-					archiveArtifacts artifacts: 'version.properties'
 				}
 			}
 		}
+// 		stage('Set build number') {
+// 			steps {
+// 				script {
+// 					def buildNumber;
+// 					lock ('tagging-betwave-server') {
+// 						buildNumber = tagBuildNumber scm
+// 					}
+//
+// 					withMaven(maven: "Maven 3") {
+// 						sh "mvn tagging:build-number -DbuildNumber=${buildNumber}"
+// 					}
+//
+// 					def pom = readMavenPom file: "betwave/betwave-root/pom.xml"
+// 					buildName pom.version
+//
+// 					writeFile file: 'version.properties', text: "version=${pom.version}"
+// 					archiveArtifacts artifacts: 'version.properties'
+// 				}
+// 			}
+// 		}
 		stage('Build & Deploy') {
 			steps {
 				withMaven(maven: "Maven 3", options: [artifactsPublisher(disabled: true)]) {
