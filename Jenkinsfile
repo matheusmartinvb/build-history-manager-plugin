@@ -62,35 +62,35 @@ pipeline {
 				}
 			}
 		}
-		stage('Resolve version ranges') {
-			steps {
-				withMaven(maven: "Maven 3") {
-					sh "mvn versions:resolve-ranges -U"
+// 		stage('Resolve version ranges') {
+// 			steps {
+// 				withMaven(maven: "Maven 3") {
+// 					sh "mvn versions:resolve-ranges -U"
 // 					sh "mvn tagging:list-dependencies -DoutputFile=dependencies.txt"
-					archiveArtifacts artifacts: 'dependencies.txt'
-				}
-			}
-		}
-		stage('Check for changes') {
-			steps {
-				echo "Previous commit: ${env.GIT_PREVIOUS_COMMIT}"
-				echo "Current commit: ${gitCommit}"
-				script {
-					if (params.onlyIfChanges && gitCommit == env.GIT_PREVIOUS_COMMIT) {
-						copyArtifacts filter: 'dependencies.txt', fingerprintArtifacts: false, projectName: env.JOB_NAME,
-						              selector: lastWithArtifacts(), target: 'upstream', optional: true
-						def oldDependencies =
-							(fileExists('upstream/dependencies.txt') ? readFile('upstream/dependencies.txt') : '')
-						def newDependencies = readFile 'dependencies.txt'
-						if (oldDependencies == newDependencies) {
-							buildName 'Empty'
-							currentBuild.result = 'ABORTED'
-                     error('There have been no changes since the last build')
-						}
-					}
-				}
-			}
-		}
+// 					archiveArtifacts artifacts: 'dependencies.txt'
+// 				}
+// 			}
+// 		}
+// 		stage('Check for changes') {
+// 			steps {
+// 				echo "Previous commit: ${env.GIT_PREVIOUS_COMMIT}"
+// 				echo "Current commit: ${gitCommit}"
+// 				script {
+// 					if (params.onlyIfChanges && gitCommit == env.GIT_PREVIOUS_COMMIT) {
+// 						copyArtifacts filter: 'dependencies.txt', fingerprintArtifacts: false, projectName: env.JOB_NAME,
+// 						              selector: lastWithArtifacts(), target: 'upstream', optional: true
+// 						def oldDependencies =
+// 							(fileExists('upstream/dependencies.txt') ? readFile('upstream/dependencies.txt') : '')
+// 						def newDependencies = readFile 'dependencies.txt'
+// 						if (oldDependencies == newDependencies) {
+// 							buildName 'Empty'
+// 							currentBuild.result = 'ABORTED'
+//                      error('There have been no changes since the last build')
+// 						}
+// 					}
+// 				}
+// 			}
+// 		}
 // 		stage('Set build number') {
 // 			steps {
 // 				script {
