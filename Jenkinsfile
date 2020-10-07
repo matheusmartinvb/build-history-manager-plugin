@@ -62,15 +62,15 @@ pipeline {
 				}
 			}
 		}
-		stage('Resolve version ranges') {
-			steps {
-				withMaven(maven: "Maven 3") {
-					sh "mvn versions:resolve-ranges -U"
-					sh "mvn tagging:list-dependencies -DoutputFile=dependencies.txt"
-					archiveArtifacts artifacts: 'dependencies.txt'
-				}
-			}
-		}
+// 		stage('Resolve version ranges') {
+// 			steps {
+// 				withMaven(maven: "Maven 3") {
+// 					sh "mvn versions:resolve-ranges -U"
+// 					sh "mvn tagging:list-dependencies -DoutputFile=dependencies.txt"
+// 					archiveArtifacts artifacts: 'dependencies.txt'
+// 				}
+// 			}
+// 		}
 // 		stage('Check for changes') {
 // 			steps {
 // 				echo "Previous commit: ${env.GIT_PREVIOUS_COMMIT}"
