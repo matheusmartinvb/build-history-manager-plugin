@@ -66,7 +66,7 @@ pipeline {
 			steps {
 				withMaven(maven: "Maven 3") {
 					sh "mvn versions:resolve-ranges -U"
-// 					sh "mvn tagging:list-dependencies -DoutputFile=dependencies.txt"
+					sh "mvn tagging:list-dependencies -DoutputFile=dependencies.txt"
 					archiveArtifacts artifacts: 'dependencies.txt'
 				}
 			}
