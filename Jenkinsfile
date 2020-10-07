@@ -22,7 +22,7 @@ pipeline {
 			],
 			[
 				// Keep last 30 builds (regardless of status)
-				matchAtMost: 5,
+				matchAtMost: 30,
 				continueAfterMatch: false
 			],
 			[
@@ -30,7 +30,7 @@ pipeline {
 				conditions: [
 					BuildResult(matchSuccess: true)
 				],
-				matchAtMost: 5,
+				matchAtMost: 30,
 				continueAfterMatch: false
 			],
 			[
