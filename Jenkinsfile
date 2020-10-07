@@ -45,7 +45,7 @@ pipeline {
 
 	parameters {
 		booleanParam(name: 'onlyIfChanges',
-		             description: 'Run the build only if there have been SCM or dependency changes', defaultValue: false)
+		             description: 'Run the build only if there have been SCM or dependency changes', defaultValue: true)
 	}
 
 	triggers {
