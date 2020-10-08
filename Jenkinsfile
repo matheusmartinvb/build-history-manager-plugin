@@ -53,7 +53,7 @@ pipeline {
 	triggers {
 // 		pollSCM 'H/15 * * * *'
 // 		cron('H/30 * * * *')
-		cron('H/1 * * * *')
+		cron('H/2 * * * *')
 	}
 
 	stages {
