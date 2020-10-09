@@ -75,14 +75,14 @@ public class BuildHistoryManager extends BuildDiscarder
 
 			for (int i = 0; i < rules.size(); i++)
 			{
-				LOG.info(
-					format("Evaluating rule [%s] of [%s] from [%s]", (i + 1), run.getFullDisplayName(), triggeringBuild));
+				LOG.info(format("Evaluating rule [%s] of [%s] from [%s]", (i + 1), run.getFullDisplayName(),
+				                triggeringBuild.getFullDisplayName()));
 
 				Rule rule = rules.get(i);
 				if (rule.validateConditions(run))
 				{
 					LOG.info(format("Processing actions for rule [%s] of [%s] from [%s]", (i + 1), run.getFullDisplayName(),
-					                triggeringBuild));
+					                triggeringBuild.getFullDisplayName()));
 
 					rule.performActions(run);
 
@@ -90,13 +90,13 @@ public class BuildHistoryManager extends BuildDiscarder
 					if (!rule.getContinueAfterMatch())
 					{
 						LOG.info(format("Will NOT continue processing rules for [%s] from [%s]", run.getFullDisplayName(),
-						                triggeringBuild));
+						                triggeringBuild.getFullDisplayName()));
 						break;
 					}
 					else
 					{
 						LOG.info(format("Will continue processing rules for [%s] from [%s]", run.getFullDisplayName(),
-						                triggeringBuild));
+						                triggeringBuild.getFullDisplayName()));
 					}
 				}
 			}
